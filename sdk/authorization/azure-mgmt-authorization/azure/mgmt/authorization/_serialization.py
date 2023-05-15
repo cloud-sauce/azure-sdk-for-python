@@ -790,19 +790,21 @@ class Serializer(object):
         else:
             return str(output)
 
-    def serialize_data(self, data, data_type, **kwargs):
+    def serialize_data(self, data, data_type, required=True, **kwargs):
         """Serialize generic data according to supplied data type.
 
         :param data: The data to be serialized.
         :param str data_type: The type to be serialized from.
         :param bool required: Whether it's essential that the data not be
          empty or None
-        :raises: AttributeError if required data is None.
-        :raises: ValueError if data is None
+        :raises: ValueError if required data is None
         :raises: SerializationError if serialization fails.
         """
         if data is None:
-            raise ValueError("No value for given attribute")
+            if required:
+                raise ValueError("No value for given attribute")
+            else:
+                return data
 
         try:
             if data is AzureCoreNull:
