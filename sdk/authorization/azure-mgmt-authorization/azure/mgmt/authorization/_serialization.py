@@ -905,10 +905,7 @@ class Serializer(object):
 
         serialized = []
         for d in data:
-            try:
-                serialized.append(self.serialize_data(d, iter_type, **kwargs))
-            except ValueError:
-                serialized.append(None)
+            serialized.append(self.serialize_data(d, iter_type, required=False, **kwargs))
 
         if div:
             serialized = ["" if s is None else str(s) for s in serialized]
@@ -952,10 +949,7 @@ class Serializer(object):
         serialization_ctxt = kwargs.get("serialization_ctxt", {})
         serialized = {}
         for key, value in attr.items():
-            try:
-                serialized[self.serialize_unicode(key)] = self.serialize_data(value, dict_type, **kwargs)
-            except ValueError:
-                serialized[self.serialize_unicode(key)] = None
+            serialized[self.serialize_unicode(key)] = self.serialize_data(value, dict_type, required=False, **kwargs)
 
         if "xml" in serialization_ctxt:
             # XML serialization is more complicated
